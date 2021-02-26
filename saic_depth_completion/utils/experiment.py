@@ -4,7 +4,7 @@ import logging
 import shutil
 from easydict import EasyDict as edict
 from saic_depth_completion.utils.registry import Registry
-
+import time
 
 parsers = Registry()
 
@@ -24,17 +24,17 @@ def setup_experiment(cfg, config_file, postfix="", log_dir="./logs/", tensorboar
         log_dir, experiment.name
     )
     experiment.snapshot_dir = os.path.join(
-        log_dir, experiment.name, "snapshots"
+        log_dir, "checkpoint"
     )
     experiment.tensorboard_dir = os.path.join(
-        tensorboard_dir, experiment.name
+        log_dir , "tensorboard"
     )
 
     if not debug:
         logger.info("Experiment dir: {}".format(experiment.dir))
-        os.makedirs(experiment.snapshot_dir, exist_ok=not training)
+        os.makedirs(experiment.snapshot_dir, exist_ok=True)
         logger.info("Snapshot dir: {}".format(experiment.snapshot_dir))
-        os.makedirs(experiment.tensorboard_dir, exist_ok=not training)
+        os.makedirs(experiment.tensorboard_dir, exist_ok=True)
         logger.info("Tensorboard dir: {}".format(experiment.tensorboard_dir))
 
         if training:

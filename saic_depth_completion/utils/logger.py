@@ -1,8 +1,11 @@
 import logging
 from colorlog import ColoredFormatter
+import os
 
+def setup_logger(log_dir=None):
 
-def setup_logger():
+    
+
 
     formatter = ColoredFormatter(
         "%(log_color)s%(asctime)s - %(yellow)s%(name)s: %(white)s%(message)s",
@@ -18,6 +21,9 @@ def setup_logger():
     )
 
     logger = logging.getLogger('saic-dc')
+    if log_dir:
+        log_file_save_path = os.path.join(log_dir, "exp_output.log")
+        logging.basicConfig(filename=log_file_save_path)
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
     logger.addHandler(handler)

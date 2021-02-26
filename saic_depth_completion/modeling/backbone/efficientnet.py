@@ -42,8 +42,17 @@ class EfficientNet(_EfficientNet):
         self.multi_scale_output = model_cfg.multi_scale_output
         self.stage_specs = sys.modules[__name__].__getattribute__(model_cfg.arch.replace("-", "_"))
         self.num_blocks = len(self._blocks)
+        if hasattr(self, '_avg_pooling'):
+            del self._avg_pooling
+        if hasattr(self, '_fc'):
+            del self._fc
+        if hasattr(self, '_conv_head'):
+            del self._conv_head
+        if hasattr(self, '_dropout'):
+            del self._dropout
 
-        del self._fc, self._conv_head, self._bn1, self._avg_pooling, self._dropout
+        # del self._fc, self._conv_head, self._bn1, self._avg_pooling, self._dropout
+
 
     @property
     def feature_channels(self):

@@ -6,8 +6,9 @@ from saic_depth_completion.utils.meter import AggregatedMeter
 from saic_depth_completion.utils.meter import Statistics as LossMeter
 from saic_depth_completion.engine.val import validate
 
+
 def train(
-    model, trainloader, optimizer, val_loaders={}, scheduler=None, snapshoter=None, logger=None,
+    args, model, trainloader, optimizer, val_loaders={}, scheduler=None, snapshoter=None, logger=None,
     epochs=100, init_epoch=0,  logging_period=10, metrics={}, tensorboard=None, tracker=None
 ):
 
@@ -29,6 +30,7 @@ def train(
         loss_meter.reset()
         metrics_meter.reset()
         # loop over dataset
+
         for it, batch in enumerate(trainloader):
             batch = model.preprocess(batch)
             pred = model(batch)
@@ -52,6 +54,15 @@ def train(
                 )
                 logger.info(state + metrics_meter.suffix)
 
+            global_it = epoch * num_batches + it
+            if snapshoter is not None and global_it % snapshoter.period == 0 and epoch > 1:
+                snapshoter.save('snapshot_{}_{}'.format(epoch, it))
+
+                validate(
+                args, model, val_loaders, metrics, epoch=epoch, logger=logger,
+                tensorboard=tensorboard, tracker=tracker, final_result=False
+                )
+
         state = "ep: {}, it {}/{} -- loss {:.4f}({:.4f}) | ".format(
             epoch, it, num_batches, loss_meter.median, loss_meter.global_avg
         )
@@ -62,20 +73,23 @@ def train(
             tensorboard.update(
                 {k: v.global_avg for k, v in metrics_meter.meters.items()}, tag="train", epoch=epoch
             )
-            tensorboard.add_figures(batch, post_pred, epoch=epoch)
+            # tensorboard.add_figures(batch, post_pred, epoch=epoch)
 
-        if snapshoter is not None and epoch % snapshoter.period == 0:
+        if snapshoter is not None and epoch % snapshoter.period == 0 and epoch > 1:
+
             snapshoter.save('snapshot_{}'.format(epoch))
 
-        # validate
-        # ...
-        validate(
-            model, val_loaders, metrics, epoch=epoch, logger=logger,
-            tensorboard=tensorboard, tracker=tracker
-        )
+            validate(
+                args, model, val_loaders, metrics, epoch=epoch, logger=logger,
+                tensorboard=tensorboard, tracker=tracker, final_result=False
+            )
 
     if snapshoter is not None:
         snapshoter.save('snapshot_final')
+        validate(
+                    args, model, val_loaders, metrics, epoch=epoch, logger=logger,
+                    tensorboard=tensorboard, tracker=tracker, final_result=True
+        )
 
     total_time = str(datetime.timedelta(seconds=time.time() - start_time_stamp))
 

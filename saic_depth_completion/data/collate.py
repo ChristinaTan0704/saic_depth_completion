@@ -10,6 +10,7 @@ def default_collate(samples):
             batch[k].append(v)
 
     for k, v in batch.items():
-        batch[k] = torch.stack(v)
+        if k !="gt_depth_path" and k !="color_img_path":
+            batch[k] = torch.stack(v)
 
     return batch

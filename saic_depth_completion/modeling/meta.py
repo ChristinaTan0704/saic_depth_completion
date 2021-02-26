@@ -30,9 +30,18 @@ class MetaModel(torch.nn.Module):
         batch["raw_depth"][mask] = batch["raw_depth"][mask] / self.depth_std
 
         for k, v in batch.items():
-            batch[k] = v.to(self.device)
+            if k !="gt_depth_path" and k !="color_img_path":
+                batch[k] = v.to(self.device)
 
         return batch
+    
+    def predict_process(self, pred, batch, depth_shift):
+        mask = (batch["raw_depth"] != 0)
+        # pred[mask] = pred[mask] * self.depth_std
+        # pred[mask] = pred[mask] + self.depth_mean
+        pred *= depth_shift # TODO
+        pred = pred.squeeze()
+        return pred
 
     def postprocess(self, input):
         return self.model.postprocess(input)
