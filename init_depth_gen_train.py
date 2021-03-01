@@ -71,7 +71,7 @@ def main():
         "--default_cfg", dest="default_cfg", type=str, default="LRN", help="Default config"
     )
     parser.add_argument(
-        "--config_file", default="./configs/lrn/LRN_efficientnet-b4_lena.yaml", type=str, metavar="FILE", help="path to config file"
+        "--config_file", default="init_depth_generator/saic_depth_completion/configs/lrn/LRN_efficientnet-b4_lena.yaml", type=str, metavar="FILE", help="path to config file"
     )
     parser.add_argument( # TODO
         "--test_batch_size", default=1, type=int, 

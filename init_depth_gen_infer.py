@@ -57,8 +57,6 @@ def main():
     # TODO
     parser.add_argument('--num_epochs',                type=int,   help='number of epochs', dest='epoch', default=100)
     parser.add_argument('--output_save_folder',        type=str,   help='output_main_folder only use during inference', default='/project/3dlg-hcvc/jiaqit/exp_result')
-
-
     parser.add_argument(
         "--debug", dest="debug", type=bool, default=False, help="Setup debug mode"
     )
@@ -69,7 +67,7 @@ def main():
         "--default_cfg", dest="default_cfg", type=str, default="LRN", help="Default config"
     )
     parser.add_argument(
-        "--config_file", default="./configs/lrn/LRN_efficientnet-b4_lena.yaml", type=str, metavar="FILE", help="path to config file"
+        "--config_file", default="init_depth_generator/saic_depth_completion/configs/lrn/LRN_efficientnet-b4_lena.yaml", type=str, metavar="FILE", help="path to config file"
     )
     parser.add_argument( # TODO
         "--test_batch_size", default=1, type=int, 
