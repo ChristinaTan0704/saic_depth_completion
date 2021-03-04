@@ -19,44 +19,26 @@ import os
 def main():
     parser = argparse.ArgumentParser(description="Some training params.")
 
-    # TODO
     parser.add_argument('--model_name',                type=str,   help='model name', default='saic')
-    #TODO
-    parser.add_argument('--refined_depth',             action='store_true',  help='using coco input format or not')
-    #TODO
-    parser.add_argument('--mesh_depth',                action='store_true',  help='using coco input format or not')
-    # TODO
-    parser.add_argument('--coco_val',                  type=str,   help='coco json path', default='/local-scratch/share_data/mirror3D/nyu/nyu_crop_456_608/coco_input/dt_only_15m3d_noraml/pos_test_normalFormat_15_normal.json')
-    # TODO
-    parser.add_argument('--coco_train',                type=str,   help='coco json path', default='/local-scratch/share_data/mirror3D/nyu/nyu_crop_456_608/coco_input/with_neg_1280_1024/pos_train_normalFormat_10_normal.json')
-    # TODO
-    parser.add_argument('--coco_train_root',           type=str,   help='coco data root', 
-        default="/local-scratch/share_data/mirror3D/nyu/nyu_crop_456_608")
-    # TODO
-    parser.add_argument('--coco_val_root',             type=str,   help='coco data root', 
-        default="/local-scratch/share_data/mirror3D/nyu/nyu_crop_456_608")
-    # TODO
+    
+    # Input source config
+    parser.add_argument('--coco_val',                  type=str,   help='coco json path', default='')
+    parser.add_argument('--coco_train',                type=str,   help='coco json path', default='')
+    parser.add_argument('--coco_train_root',           type=str,   help='coco data root', default="")
+    parser.add_argument('--coco_val_root',             type=str,   help='coco data root', default="")
     parser.add_argument('--coco_focal_len',            type=int,   help='nyu : 519', default=519)
-    # TODO 
-    parser.add_argument('--depth_shift',               type=int,   help='nyu : 1000, m3d : 4000', default=1000) # 4000 for m3d
-    # TODO if coda boom
-    parser.add_argument('--input_height',              type=int,   help='input height', default=256) # 480
-    # TODO  if coda boom
-    parser.add_argument('--input_width',               type=int,   help='input width',  default=320) # 640
-    # TODO
-    parser.add_argument('--batch_size',                type=int,   help='batch size',   dest='train_batch_size',  default=2)
-    # TODO
-    parser.add_argument('--learning_rate',             type=float, help='initial learning rate', default=1e-4)
-    # TODO
-    parser.add_argument('--resume_checkpoint_path',    type=str,   help='path to a checkpoint to load', default="/project/3dlg-hcvc/jiaqit/output/saic/saic_nyu_holeD_rawD_2021-01-03-14-19-57/checkpoint/snapshot_2_4.pth")
-    # TODO
-    parser.add_argument('--checkpoint_save_freq',      type=int,   help='Checkpoint saving frequency in global steps /iteration; nyu 5000; m3d 10000', dest='snapshot_period' , default=100)
-    # TODO
+    
+    # Input format config
+    parser.add_argument('--refined_depth',             action='store_true',  help='using coco input format or not')
+    parser.add_argument('--mesh_depth',                action='store_true',  help='using coco input format or not')
+    parser.add_argument('--depth_shift',               type=int,   help='nyu, scannet : 1000, m3d : 4000', default=1000) 
+    parser.add_argument('--input_height',              type=int,   help='input height', default=480) 
+    parser.add_argument('--input_width',               type=int,   help='input width',  default=640) 
+    parser.add_argument('--resume_checkpoint_path',    type=str,   help='path to a checkpoint to load', default="")
+    
     # Log and save
-    parser.add_argument('--log_directory',             type=str,   help='training output folder', default='/project/3dlg-hcvc/jiaqit/output')
-    # TODO
-    parser.add_argument('--num_epochs',                type=int,   help='number of epochs', dest='epoch', default=100)
-    parser.add_argument('--output_save_folder',        type=str,   help='output_main_folder only use during inference', default='/project/3dlg-hcvc/jiaqit/exp_result')
+    parser.add_argument('--log_directory',             type=str,   help='training output folder', default='output')
+    parser.add_argument('--output_save_folder',        type=str,   help='output_main_folder only use during inference', default='exp_result')
     parser.add_argument(
         "--debug", dest="debug", type=bool, default=False, help="Setup debug mode"
     )
