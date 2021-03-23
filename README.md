@@ -1,4 +1,4 @@
-# Mirror3D --- init_depth_generator saic (saic_depth_completion: Decoder Modulation for Indoor Depth Completion)
+# Mirror3D --- init_depth_generator saic (saic_depth_completion)
 
 We've updated the dataloader and the main train/test script to support our input format (coco format).
 
