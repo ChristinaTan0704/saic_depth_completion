@@ -34,7 +34,7 @@ class Matterport:
         # random.seed(30)
         # random.shuffle(coco_annotation["images"])
         for item in coco_annotation["images"]: # TODO 
-            self.depth_name.append(os.path.join(self.data_root, item["hole_raw_path"]))
+            self.depth_name.append(os.path.join(self.data_root, item["mesh_raw_path"]))
             self.color_name.append(os.path.join(self.data_root, item["img_path"]))
             if self.refined_depth:
                 self.render_name.append(os.path.join(self.data_root, item["mesh_refined_path"])) # completed + mirrored depth [in m3d folder]
