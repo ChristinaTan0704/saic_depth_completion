@@ -55,7 +55,7 @@ def train(
                 logger.info(state + metrics_meter.suffix)
 
             global_it = epoch * num_batches + it
-            if snapshoter is not None and global_it % snapshoter.period == 0 and epoch > 1:
+            if snapshoter is not None and global_it % snapshoter.period == 0:
                 snapshoter.save('snapshot_{}_{}'.format(epoch, it))
 
                 validate(
@@ -75,7 +75,7 @@ def train(
             )
             # tensorboard.add_figures(batch, post_pred, epoch=epoch)
 
-        if snapshoter is not None and epoch % snapshoter.period == 0 and epoch > 1:
+        if snapshoter is not None and epoch % snapshoter.period == 0:
 
             snapshoter.save('snapshot_{}'.format(epoch))
 
