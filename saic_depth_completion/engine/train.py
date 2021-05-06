@@ -59,7 +59,7 @@ def train(
 
             global_it = epoch * num_batches + it
             # validate and save checkpoint per snapshoter.period
-            if snapshoter is not None and global_it % snapshoter.period == 0 and epoch >= 0: # TODO epoch  > 0
+            if snapshoter is not None and global_it % snapshoter.period == 0 and epoch > 0:
                 snapshoter.save('snapshot_{}_{}'.format(epoch, global_it))
 
                 mirror_rmse = validate(

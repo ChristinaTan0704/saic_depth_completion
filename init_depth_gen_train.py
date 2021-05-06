@@ -19,9 +19,6 @@ import time
 
 def main():
     parser = argparse.ArgumentParser(description="Some training params.")
-
-
-
     parser.add_argument('--model_name',                type=str,   help='model name', default='vnl')
     
     # Input source config
