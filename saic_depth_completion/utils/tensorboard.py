@@ -6,10 +6,10 @@ class Tensorboard:
     def __init__(self, tb_dir, max_figures=10):
         self.tb_dir = tb_dir
         self.max_figures = max_figures
-    def update(self, metrics_dict, epoch, tag="train"):
-        with tb.SummaryWriter(self.tb_dir) as writer:
-            for k, v in metrics_dict.items():
-                writer.add_scalar(k+"/"+tag, v, epoch)
+        self.writer = tb.SummaryWriter(self.tb_dir)
+    def update(self, metrics_dict, iter, tag="train"):
+        for k, v in metrics_dict.items():
+            self.writer.add_scalar(k+"/"+tag, v, iter)
     def add_figures(self, batch, post_pred, tag="train", epoch=0):
         with tb.SummaryWriter(self.tb_dir) as writer:
             B = batch["color"].shape[0]

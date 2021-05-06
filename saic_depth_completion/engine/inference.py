@@ -31,7 +31,7 @@ def inference(
         args, model, test_loaders, metrics, save_dir="", logger=None
 ):
     mirror3d_eval = Mirror3d_eval(args.refined_depth, logger, Input_tag="RGBD", method_tag="saic")
-
+    
     model.eval()
     metrics_meter = AggregatedMeter(metrics, maxlen=20)
     for subset, loader in test_loaders.items():
