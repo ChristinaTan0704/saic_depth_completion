@@ -70,7 +70,7 @@ def train(
                 import os
                 checkpoint_save_list.append(os.path.join(snapshoter.save_dir, "{}.pth".format('snapshot_{}_{}'.format(epoch, global_it))))
 
-                if check_converge(score_list=mirror_score_list):
+                if check_converge(score_list=mirror_score_list,check_freq=3):
                     final_checkpoint_src = checkpoint_save_list[-3]
                     final_checkpoint_dst = os.path.join(os.path.split(final_checkpoint_src)[0], "converge_{}".format(os.path.split(final_checkpoint_src)[-1]))
                     shutil.copy(final_checkpoint_src, final_checkpoint_dst)
