@@ -76,6 +76,8 @@ def train(
                     shutil.copy(final_checkpoint_src, final_checkpoint_dst)
                     is_converge = True
                     break
+                else:
+                    print("model not converged")
             if tensorboard is not None:
                 tensorboard.update(
                     {k: v.global_avg for k, v in metrics_meter.meters.items()}, tag="train", iter=global_it
