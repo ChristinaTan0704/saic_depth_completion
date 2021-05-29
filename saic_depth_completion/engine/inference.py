@@ -30,7 +30,7 @@ def save_txt(save_path, data):
 def inference(
         args, model, test_loaders, metrics, save_dir="", logger=None
 ):
-    mirror3d_eval = Mirror3d_eval(args.refined_depth, logger, Input_tag="RGBD", method_tag="saic")
+    mirror3d_eval = Mirror3d_eval(args.refined_depth, logger, Input_tag="RGBD", method_tag="saic",dataset_root=args.coco_val_root)
     
     model.eval()
     metrics_meter = AggregatedMeter(metrics, maxlen=20)
@@ -72,9 +72,10 @@ def inference(
                 post_pred[post_pred<0] = 0
 
                 gt_depth = cv2.resize(cv2.imread(gt_depth_path, cv2.IMREAD_ANYDEPTH), (post_pred.shape[1], post_pred.shape[0]), 0, 0, cv2.INTER_NEAREST) / args.depth_shift
-                mirror3d_eval.compute_and_update_mirror3D_metrics(post_pred/args.depth_shift, args.depth_shift, batch["color_img_path"][0])
-                mirror3d_eval.save_result(args.log_directory, post_pred/args.depth_shift, args.depth_shift, batch["color_img_path"][0])
+                mirror3d_eval.compute_and_update_mirror3D_metrics(post_pred/args.depth_shift, args.depth_shift, batch["color_img_path"][0], batch["rawD_path"][0], batch["gt_depth_path"][0], batch["mask_path"][0])
+                mirror3d_eval.save_result(args.log_directory, post_pred/args.depth_shift, args.depth_shift, batch["color_img_path"][0], batch["rawD_path"][0], batch["gt_depth_path"][0], batch["mask_path"][0])
                 
+
         mirror3d_eval.print_mirror3D_score()
         
 

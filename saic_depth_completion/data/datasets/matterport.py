@@ -19,7 +19,7 @@ class Matterport:
         self.split_file = os.path.join(root, "splits", split + ".txt")
         # if not os.path.exists(coco_path) and not os.path.exists(root):
         #     self.data_list = self._get_data_list(self.split_file)
-        self.color_name, self.depth_name, self.render_name = [], [], []
+        self.color_name, self.depth_name, self.render_name, self.rawD_path_list, self.mask_path_list = [], [], [], [], []
         self.normal_name = []
         self.coco_path = coco_path
         self.refined_depth = refined_depth
@@ -34,12 +34,15 @@ class Matterport:
         # random.seed(30)
         # random.shuffle(coco_annotation["images"])
         for item in coco_annotation["images"]: # TODO 
-            self.depth_name.append(os.path.join(self.data_root, item["mesh_raw_path"]))
-            self.color_name.append(os.path.join(self.data_root, item["img_path"]))
+            self.depth_name.append(os.path.join(self.data_root, item["raw_meshD_path"]))
+            self.color_name.append(os.path.join(self.data_root, item["mirror_color_image_path"]))
+            self.rawD_path_list.append(os.path.join(self.data_root, item["raw_meshD_path"]))
+            self.mask_path_list.append(os.path.join(self.data_root, item["mirror_instance_mask_path"]))
+            
             if self.refined_depth:
-                self.render_name.append(os.path.join(self.data_root, item["mesh_refined_path"])) # completed + mirrored depth [in m3d folder]
+                self.render_name.append(os.path.join(self.data_root, item["refined_meshD_path"])) # completed + mirrored depth [in m3d folder]
             else:
-                self.render_name.append(os.path.join(self.data_root, item["mesh_raw_path"]))  # completed depth
+                self.render_name.append(os.path.join(self.data_root, item["raw_meshD_path"]))  # completed depth
 
     def _get_data_list(self, filename):
         with open(filename, 'r') as f:
@@ -87,10 +90,11 @@ class Matterport:
                 'color':        torch.tensor(color, dtype=torch.float32),
                 'raw_depth':    torch.tensor(depth, dtype=torch.float32).unsqueeze(0),
                 'mask':         torch.tensor(mask, dtype=torch.float32).unsqueeze(0),
-                # 'normals':      torch.tensor(normals, dtype=torch.float32).unsqueeze(0),
                 'gt_depth':     torch.tensor(render_depth, dtype=torch.float32).unsqueeze(0),
                 'gt_depth_path':self.render_name[index],
-                'color_img_path':self.color_name[index]
+                'color_img_path':self.color_name[index],
+                'rawD_path':self.rawD_path_list[index],
+                'mask_path':self.mask_path_list[index]
                 
             }
         else:
@@ -98,7 +102,9 @@ class Matterport:
                 'color':        torch.tensor(color, dtype=torch.float32),
                 'raw_depth':    torch.tensor(depth, dtype=torch.float32).unsqueeze(0),
                 'mask':         torch.tensor(mask, dtype=torch.float32).unsqueeze(0),
-                # 'normals':      torch.tensor(normals, dtype=torch.float32).unsqueeze(0),
                 'gt_depth':     torch.tensor(render_depth, dtype=torch.float32).unsqueeze(0),
-                
+                'gt_depth_path':self.render_name[index],
+                'color_img_path':self.color_name[index],
+                'rawD_path':self.rawD_path_list[index],
+                'mask_path':self.mask_path_list[index]
             }

@@ -30,7 +30,7 @@ class MetaModel(torch.nn.Module):
         batch["raw_depth"][mask] = batch["raw_depth"][mask] / self.depth_std
 
         for k, v in batch.items():
-            if k !="gt_depth_path" and k !="color_img_path":
+            if k !="gt_depth_path" and k !="color_img_path" and k!='rawD_path' and k != 'mask_path':
                 batch[k] = v.to(self.device)
 
         return batch
