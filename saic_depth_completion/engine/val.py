@@ -5,13 +5,13 @@ from tqdm import tqdm
 
 from saic_depth_completion.utils.meter import AggregatedMeter
 from saic_depth_completion.utils.meter import Statistics as LossMeter
-from utils.mirror3d_metrics import Mirror3dEval
+from mirror3d.utils.mirror3d_metrics import Mirror3dEval
 import cv2
 
 def validate(
         args, model, val_loaders, metrics, epoch=0, logger=None, tensorboard=None, tracker=None, final_result=False,global_it=0
 ):
-    mirror3d_eval = Mirror3dEval(args.refined_depth, logger, Input_tag="RGBD", method_tag="saic",dataset_root=args.coco_val_root)
+    mirror3d_eval = Mirror3dEval(args.refined_depth, logger, input_tag="RGBD", method_tag="saic",dataset_root=args.coco_val_root)
     model.eval()
     metrics_meter = AggregatedMeter(metrics, maxlen=20)
     for subset, loader in val_loaders.items():

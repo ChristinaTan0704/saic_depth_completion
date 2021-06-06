@@ -6,7 +6,7 @@ import shutil
 from saic_depth_completion.utils.meter import AggregatedMeter
 from saic_depth_completion.utils.meter import Statistics as LossMeter
 from saic_depth_completion.engine.val import validate
-from utils.general_utils import *
+from mirror3d.utils.general_utils import *
 
 def train(
     args, model, trainloader, optimizer, val_loaders={}, scheduler=None, snapshoter=None, logger=None,

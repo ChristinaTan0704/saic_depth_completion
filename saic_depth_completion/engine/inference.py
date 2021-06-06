@@ -7,7 +7,7 @@ from PIL import Image
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from utils.mirror3d_metrics import Mirror3dEval
+from mirror3d.utils.mirror3d_metrics import Mirror3dEval
 
 from saic_depth_completion.utils.meter import AggregatedMeter
 from saic_depth_completion.utils.meter import Statistics as LossMeter
@@ -30,7 +30,7 @@ def save_txt(save_path, data):
 def inference(
         args, model, test_loaders, metrics, save_dir="", logger=None
 ):
-    mirror3d_eval = Mirror3dEval(args.refined_depth, logger, Input_tag="RGBD", method_tag="saic",dataset_root=args.coco_val_root)
+    mirror3d_eval = Mirror3dEval(args.refined_depth, logger, input_tag="RGBD", method_tag="saic",dataset_root=args.coco_val_root)
     
     model.eval()
     metrics_meter = AggregatedMeter(metrics, maxlen=20)
